@@ -1,0 +1,139 @@
+body {
+    margin:0;
+}
+
+a{
+	text-decoration:none;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+p{
+    font-family:math;
+}
+
+.wrapper{
+    display: inline-grid;
+    margin: 1em;
+}
+.input-box{
+    display:flex;
+    margin-top:10px;
+}
+.input{
+    padding-right:0;
+    border: 1px solid black;
+    border-right:0;
+    
+    line-height:2em;
+    padding:0.2em;
+}
+.result-box{
+    border-style: solid;
+    border-width:thin;
+    border-left-color: gray;
+
+        
+    line-height:4vh;
+    padding:0.2em;
+    text-align:center;
+    width:4vh;
+}
+.grid-box{
+    display: grid;
+    grid-template-areas:
+    "a b"
+    "c d"
+    "e f";
+    margin-top: 20px;
+    grid-row-gap: 20px;
+    grid-template-columns: 30vw;
+    grid-template-rows: 4vh;
+    grid-auto-rows: 4vh;
+}
+p{
+    margin:0;
+}
+.class-selector{
+    height:4vh;
+}
+.navbar{
+    top:0%;
+    width:100%;
+    
+    background-color:#fbb03b;
+    font-size:20px;
+    padding-left:18px;
+    padding-bottom:10px;
+}
+.navbar p {
+    font-size:14px;
+}
+
+.wrapper-title h2{
+    margin-top:0;
+    font-size:22px;
+}
+
+.wrapper-title{
+    max-width: 35vw;
+}
+
+.footer{
+    background-color: #fbb03b;
+        width: 100%;
+    bottom: 0;
+    padding: 1em;
+    box-sizing: border-box;
+}
+
+.header-title{
+    margin:0;
+    margin-bottom: 10px;
+    padding-top: 10px;
+}
+
+@media only screen and (max-device-width:1240px){
+    .grid-box{
+        display: grid;
+        grid-template-areas:
+        "a b"
+        "c d"
+        "e f";
+        margin-top: 20px;
+        grid-row-gap: 20px;
+        grid-template-columns: 60vw;
+        grid-template-rows: 7vh;
+	grid-auto-rows: 7vh;
+    }
+    .result-box p{
+        font-size:12px;
+    }
+    .result-box{
+        font-size:12px;
+	line-height: 7vh;
+        width: 7vh;
+	height:7vh;
+	box-sizing:border-box;
+	text-align:center;
+    }
+    .wrapper-title{
+        max-width: 50vw;
+    }
+    .wrapper-title h2{
+        margin-top:0;
+        font-size:16px;
+    }
+    .input{
+	box-sizing:border-box;
+	height:7vh;
+	line-height:7vh;
+	}
+
+	.class-selector{
+	height:7vh;
+}
+}
