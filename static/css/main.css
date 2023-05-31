@@ -96,6 +96,11 @@ p{
     padding-top: 10px;
 }
 
+.sex{
+    padding:1em 0em;
+    margin-bottom: 15px;
+}
+
 @media only screen and (max-device-width:1240px){
     .grid-box{
         display: grid;

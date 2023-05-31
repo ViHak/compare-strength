@@ -24,7 +24,8 @@ def get_percentile(request: Request):
     bw = int(request.query_params['val1'])
     bench = int(request.query_params.get('val2'))
     name = (request.query_params.get('name'))
-    score = percentile_of_score(bw, bench, name)
+    sex = request.query_params.get('sex')
+    score = percentile_of_score(bw, bench, name, sex)
     
     return ({"result":score})
 
