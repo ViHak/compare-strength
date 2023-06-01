@@ -11,14 +11,10 @@ conn = 'sqlite://'+db_path
 query = """SELECT field2, field4, field8, field14, field24, field19
 FROM openpowerlifting"""
 
-df = pl.read_sql(query, conn)
+df = pl.read_database(query, conn)
 df = df[1:,:]
 
-# TODO: Do this with SQL instead
-df = df.filter((pl.col("field4")=="Raw") | (pl.col("field4")=="Wraps"))
 df = df.with_columns(pl.col('field8').cast(pl.Float32, strict=False))
-
-#df = df.filter(pl.col("field2")=="M")
 
 def pick_weight_class(body_weight, sex):
     weight_class = 40
@@ -49,14 +45,14 @@ def change_data(index, weight_classes, hf, lift):
 def correct_field(hf, lift):
     match lift:
         case "bench":
-            hf = hf.with_column(pl.col('field19').cast(pl.Float32, strict=False))
+            hf = hf.with_columns(pl.col('field19').cast(pl.Float32, strict=False))
             hf = hf.filter(pl.col("field19")>0)
             hf = hf.drop_nulls(subset=['field19'])
             
             return hf.select("field19")
         
         case "squat":
-            hf = hf.with_column(pl.col('field14').cast(pl.Float32, strict=False))
+            hf = hf.with_columns(pl.col('field14').cast(pl.Float32, strict=False))
             hf = hf.filter((pl.col("field14")>0))
             hf = hf.filter((pl.col("field4")=="Raw"))
             
@@ -65,7 +61,7 @@ def correct_field(hf, lift):
             return hf.select("field14")
         
         case "deadlift":
-            hf = hf.with_column(pl.col('field24').cast(pl.Float32, strict=False))
+            hf = hf.with_columns(pl.col('field24').cast(pl.Float32, strict=False))
 
             hf = hf.filter((pl.col("field24")>0))
             hf = hf.drop_nulls(subset=['field24'])
