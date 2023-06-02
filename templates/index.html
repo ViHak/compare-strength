@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block head %}
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+{% endblock%}
+
+
+{% block body %}
+
+<div class ="navbar">
+  <h2 class = "header-title">CompareStrength</h2>
+  <p>Compare your strength against 30k+ powerlifters</p>
+  <p style="
+    margin-top: 15px;margin-right:35px;
+">The second column displays your relative strength (percentile)
+against other competitors in your chosen weight class</p>
+</div>
+
+<div class = "wrapper">
+  <div class ="wrapper-title">
+    <h2>Select your weight class and input your best lifts</h2>
+</div>
+        
+        <select name="weight_classes" id = "weight_classes" class = "class-selector">
+          <option value="" disabled selected hidden>Weight Class (kg)</option>
+          <option value="53">53kg</option>
+          <option value="59">59kg</option>
+          <option value="66">66kg</option>
+          <option value="74">74kg</option>
+          <option value="83">83kg</option>
+          <option value="93">93kg</option>
+          <option value="105">105kg</option>
+          <option value="120">120kg</option>
+          <option value="121">120kg+</option>
+
+        </select>
+    
+        <div class = "grid-box">
+          <input type="text" id="1" name="squat" class ="input" placeholder="Squat 1RM(kg)">
+          <div class = "result-box" id = "aha">0%</div>
+        
+          <input type="text" id="2" name="bench" class ="input" placeholder="Bench 1RM(kg)">
+          <div class = "result-box">0%</div>
+            
+          <input type="text" id="3" name="deadlift" class ="input" placeholder="Deadlift 1RM(kg)">
+          <div class = "result-box">0%</div>
+
+        </div>     
+</div>
+<div class ="footer">
+  <p>The data is from the <a href="https://www.kaggle.com/open-powerlifting/powerlifting-database">open powerlifting</a> database</p>
+</div>
+
+<script>
+    $(document).ready(function(){
+      $('.wrapper').on('change', '.grid-box .input', function(){
+        if($("#weight_classes option:selected").is(":disabled")){
+          return;
+        } 
+
+	       var val1 = $("#weight_classes option:selected").val();
+        
+         
+         var id = $(this).attr('id');
+         var name = $(this).attr('name');
+         var val2 = $("input[name*=" + name +"]").val();
+        
+         $.ajax({
+          url: "/get_percentile",
+          type: "get",
+          data: {val1: val1, val2:val2, id:id, name:name},
+          success: function(response) {
+
+            $(".wrapper .grid-box div:nth-of-type("+id+")").html('<p>'+response.result.toString()+"%"+'</p>');
+          },
+         });
+      });
+    });
+    
+    $(document).ready(function(){
+      $('.wrapper').on('change', '#weight_classes', function(){
+         var val1 = $("#weight_classes option:selected").val();
+         
+         var names = ["squat", "bench", "deadlift"];
+         for (var i = 1; i <=3; i++){
+            var id = i;
+            var name = names[i-1];
+    
+            var val2 = $("input[name*=" + name +"]").val();
+            if(val2.length!==0){
+              changeAll(val1, id, name, val2);
+            }
+
+        }
+      });
+    });
+
+    function changeAll(val1, id, name, val2){
+      var val1 = val1;
+      var id = id;
+      var name = name;
+      var val2 = val2;
+
+      $.ajax({
+              url: "/get_percentile",
+              type: "get",
+              data: {val1: val1, val2:val2, id:id, name:name},
+              success:function(response){
+                $(".wrapper .grid-box div:nth-of-type("+id+")").html('<p>'+response.result.toString()+"%"+'</p>');
+              }
+            });
+    }
+    
+
+</script>
+
+
+{% endblock%}
+
