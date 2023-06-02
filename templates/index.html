@@ -22,14 +22,11 @@
           <!-- <option value="" disabled selected hidden>Weight Class (kg)</option> -->
           <option value="M">Male</option>
           <option value="F">Female</option>
-
         </select>
-
 
         <label for ="weight_classes"></label>
         <select name="weight_classes" id = "weight_classes" class = "class-selector">
           <option value="" disabled selected hidden>Weight Class (kg)</option>
-         <!-- <option value="53">53kg</option>-->
           <option value="59">59kg</option>
           <option value="66">66kg</option>
           <option value="74">74kg</option>
@@ -44,7 +41,7 @@
           <input type="text" id="1" name="squat" class ="input" placeholder="Squat one-rep-max (kg)">
           <div class = "result-box" id = "aha">0%</div>
         
-          <input type="text" id="2" name="bench" class ="input" placeholder="Bench one-rep-max (kg)">
+          <input type="text" id="2" name="bench" class ="input" placeholder="Bench press one-rep-max (kg)">
           <div class = "result-box">0%</div>
             
           <input type="text" id="3" name="deadlift" class ="input" placeholder="Deadlift one-rep-max (kg)">
@@ -74,10 +71,11 @@
       var weight_classes = [47, 52, 57, 63, 69, 76, 84, 85]
       var new_options = {"47kg":47, "52kg":52, "57kg":57, "63kg":63, "69kg":69, "76kg":76, "84kg":84, "84kg+":85}
 
-      $('.grid-box input').val('');
-      $('.grid-box .result-box p').text('0%');
       var $cw = $("#weight_classes");
       $cw.empty();
+      $('.grid-box input').val('');
+      $('.grid-box .result-box p').text('0%');
+
       $.each(new_options, function(key,value){
         $cw.append($("<option></option>").attr("value", value).text(key));
       });
