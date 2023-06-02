@@ -12,7 +12,9 @@ html, body {
 }
 
 p{
-    font-family:math;
+    font-family:monospace;
+    margin:0;
+    font-size:17px;
 }
 
 .wrapper{
@@ -54,9 +56,7 @@ p{
     grid-template-rows: 4vh;
     grid-auto-rows: 4vh;
 }
-p{
-    margin:0;
-}
+
 .class-selector{
     height:4vh;
 }
@@ -68,9 +68,6 @@ p{
     font-size:20px;
     padding-left:18px;
     padding-bottom:10px;
-}
-.navbar p {
-    font-size:14px;
 }
 
 .wrapper-title h2{
