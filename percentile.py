@@ -14,13 +14,19 @@ FROM openpowerlifting"""
 df = pl.read_sql(query, conn)
 df = df[1:,:]
 
+# TODO: Do this with SQL instead
 df = df.filter((pl.col("field4")=="Raw") | (pl.col("field4")=="Wraps"))
+df = df.with_columns(pl.col('field8').cast(pl.Float32, strict=False))
 
-df = df.with_column(pl.col('field8').cast(pl.Float32, strict=False))
+#df = df.filter(pl.col("field2")=="M")
 
-df = df.filter(pl.col("field2")=="M")
+def pick_weight_class(body_weight, sex):
+    weight_class = 40
+    if(sex=="M"):
+        weight_classes = [59, 66, 74, 83, 93, 105, 120, 121]
+    else:
+        weight_classes = [47, 52, 57, 63, 69, 76, 84, 85]    
 
-def pick_weight_class(body_weight, weight_class, weight_classes):
     index = 0
     for i in range(len(weight_classes)-1):
         if body_weight > weight_classes[i]:
@@ -65,11 +71,20 @@ def correct_field(hf, lift):
             hf = hf.drop_nulls(subset=['field24'])
             return hf.select("field24")
 
-def percentile_of_score(body_weight, bench, lift, df = df):
+def select_sex(sex):
+    if(sex == "M"):
+        return df.filter(pl.col("field2")=="M")
+    else:
+        return df.filter(pl.col("field2")=="F")
 
-    weight_class = 53
+# TODO: Passing DF as an argument here doesn't really make sense (?) since it can be accessed
+# from inside the function anyways, remove it
+def percentile_of_score(body_weight, bench, lift, sex):
+
+    df = select_sex(sex)
+    weight_class = 0
     weight_classes = [53, 59, 66, 74, 83, 93, 105, 120, 121]
-    index, weight_class = pick_weight_class(body_weight, weight_class, weight_classes)
+    index, weight_class = pick_weight_class(body_weight, sex)
 
     df = change_data(index, weight_classes, df, lift)
 

@@ -20,10 +20,20 @@ against other competitors in your chosen weight class</p>
   <div class ="wrapper-title">
     <h2>Select your weight class and input your best lifts</h2>
 </div>
-        
+
+        <label for ="sex">Sex</label>
+        <select name="sex" id = "sex" class ="sex">
+          <!-- <option value="" disabled selected hidden>Weight Class (kg)</option> -->
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+
+        </select>
+
+
+        <label for ="weight_classes"></label>
         <select name="weight_classes" id = "weight_classes" class = "class-selector">
           <option value="" disabled selected hidden>Weight Class (kg)</option>
-          <option value="53">53kg</option>
+         <!-- <option value="53">53kg</option>-->
           <option value="59">59kg</option>
           <option value="66">66kg</option>
           <option value="74">74kg</option>
@@ -32,24 +42,54 @@ against other competitors in your chosen weight class</p>
           <option value="105">105kg</option>
           <option value="120">120kg</option>
           <option value="121">120kg+</option>
-
         </select>
     
         <div class = "grid-box">
-          <input type="text" id="1" name="squat" class ="input" placeholder="Squat 1RM(kg)">
+          <input type="text" id="1" name="squat" class ="input" placeholder="Squat one-rep-max (kg)">
           <div class = "result-box" id = "aha">0%</div>
         
-          <input type="text" id="2" name="bench" class ="input" placeholder="Bench 1RM(kg)">
+          <input type="text" id="2" name="bench" class ="input" placeholder="Bench one-rep-max (kg)">
           <div class = "result-box">0%</div>
             
-          <input type="text" id="3" name="deadlift" class ="input" placeholder="Deadlift 1RM(kg)">
+          <input type="text" id="3" name="deadlift" class ="input" placeholder="Deadlift one-rep-max (kg)">
           <div class = "result-box">0%</div>
-
-        </div>     
+        </div> 
 </div>
 <div class ="footer">
   <p>The data is from the <a href="https://www.kaggle.com/open-powerlifting/powerlifting-database">open powerlifting</a> database</p>
 </div>
+
+<script>
+  document.getElementById("sex").addEventListener("change", function() {
+    if($(this).val()==="M"){
+      /*There's bunch of repetition, make a function for the code below*/
+      var new_options = {"59kg": 59, "66kg":66, "74kg":74, "83kg":83, "93kg":93, "105kg":105, "120kg":120, "120kg+":121};
+      
+      var $cw = $("#weight_classes");
+      $cw.empty();
+      $('.grid-box input').val('');
+      $('.grid-box .result-box p').text('0%');
+
+      $.each(new_options, function(key, value){
+        $cw.append($("<option></option>").attr("value", value).text(key));
+      });
+    }
+    else{
+      var weight_classes = [47, 52, 57, 63, 69, 76, 84, 85]
+      var new_options = {"47kg":47, "52kg":52, "57kg":57, "63kg":63, "69kg":69, "76kg":76, "84kg":84, "84kg+":85}
+
+      $('.grid-box input').val('');
+      $('.grid-box .result-box p').text('0%');
+      var $cw = $("#weight_classes");
+      $cw.empty();
+      $.each(new_options, function(key,value){
+        $cw.append($("<option></option>").attr("value", value).text(key));
+      });
+    }
+    
+  });
+  
+  </script>
 
 <script>
     $(document).ready(function(){
@@ -59,28 +99,25 @@ against other competitors in your chosen weight class</p>
         } 
 
 	       var val1 = $("#weight_classes option:selected").val();
-        
-         
          var id = $(this).attr('id');
          var name = $(this).attr('name');
          var val2 = $("input[name*=" + name +"]").val();
+         var sex = $("#sex").val();
         
          $.ajax({
           url: "/get_percentile",
           type: "get",
-          data: {val1: val1, val2:val2, id:id, name:name},
+          data: {val1: val1, val2:val2, id:id, name:name, sex:sex},
           success: function(response) {
-
             $(".wrapper .grid-box div:nth-of-type("+id+")").html('<p>'+response.result.toString()+"%"+'</p>');
           },
          });
       });
     });
-    
     $(document).ready(function(){
       $('.wrapper').on('change', '#weight_classes', function(){
          var val1 = $("#weight_classes option:selected").val();
-         
+         var sex = $("#sex").val();
          var names = ["squat", "bench", "deadlift"];
          for (var i = 1; i <=3; i++){
             var id = i;
@@ -88,23 +125,23 @@ against other competitors in your chosen weight class</p>
     
             var val2 = $("input[name*=" + name +"]").val();
             if(val2.length!==0){
-              changeAll(val1, id, name, val2);
+              changeAll(val1, id, name, val2, sex);
             }
-
         }
       });
     });
 
-    function changeAll(val1, id, name, val2){
+    function changeAll(val1, id, name, val2, sex){
       var val1 = val1;
       var id = id;
       var name = name;
       var val2 = val2;
+      var sex = sex;
 
       $.ajax({
               url: "/get_percentile",
               type: "get",
-              data: {val1: val1, val2:val2, id:id, name:name},
+              data: {val1: val1, val2:val2, id:id, name:name, sex:sex},
               success:function(response){
                 $(".wrapper .grid-box div:nth-of-type("+id+")").html('<p>'+response.result.toString()+"%"+'</p>');
               }
