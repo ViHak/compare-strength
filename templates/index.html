@@ -4,7 +4,6 @@
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 {% endblock%}
 
-
 {% block body %}
 
 <div class ="navbar">
@@ -19,7 +18,6 @@
 
         <label for ="sex">Sex</label>
         <select name="sex" id = "sex" class ="sex">
-          <!-- <option value="" disabled selected hidden>Weight Class (kg)</option> -->
           <option value="M">Male</option>
           <option value="F">Female</option>
         </select>
@@ -27,26 +25,33 @@
         <label for ="weight_classes"></label>
         <select name="weight_classes" id = "weight_classes" class = "class-selector">
           <option value="" disabled selected hidden>Weight Class (kg)</option>
-          <option value="59">59kg</option>
-          <option value="66">66kg</option>
-          <option value="74">74kg</option>
-          <option value="83">83kg</option>
-          <option value="93">93kg</option>
-          <option value="105">105kg</option>
-          <option value="120">120kg</option>
-          <option value="121">120kg+</option>
+          <option value="59">59 kg</option>
+          <option value="66">66 kg</option>
+          <option value="74">74 kg</option>
+          <option value="83">83 kg</option>
+          <option value="93">93 kg</option>
+          <option value="105">105 kg</option>
+          <option value="120">120 kg</option>
+          <option value="121">120 kg+</option>
         </select>
-    
+   
         <div class = "grid-box">
-          <input type="text" id="1" name="squat" class ="input" placeholder="Squat one-rep-max (kg)">
-          <div class = "result-box" id = "aha">0%</div>
-        
-          <input type="text" id="2" name="bench" class ="input" placeholder="Bench press one-rep-max (kg)">
-          <div class = "result-box">0%</div>
-            
-          <input type="text" id="3" name="deadlift" class ="input" placeholder="Deadlift one-rep-max (kg)">
-          <div class = "result-box">0%</div>
-        </div> 
+          <div class ="input-box">
+            <input type="text" id="1" name="squat" class ="input" placeholder="Squat one-rep-max (kg)">
+            <div class = "result-box" id = "aha"></div>
+          </div>
+
+
+          <div class ="input-box">
+            <input type="text" id="2" name="bench" class ="input" placeholder="Bench press one-rep-max (kg)">
+            <div class = "result-box"></div>
+          </div>
+         
+          <div class ="input-box">
+            <input type="text" id="3" name="deadlift" class ="input" placeholder="Deadlift one-rep-max (kg)">
+            <div class = "result-box"></div>
+          </div>
+        </div>
 </div>
 <div class ="footer">
   <p>The data is from the <a href="https://www.kaggle.com/open-powerlifting/powerlifting-database">open powerlifting</a> database</p>
@@ -56,8 +61,8 @@
   document.getElementById("sex").addEventListener("change", function() {
     if($(this).val()==="M"){
       /*There's bunch of repetition, make a function for the code below*/
-      var new_options = {"59kg": 59, "66kg":66, "74kg":74, "83kg":83, "93kg":93, "105kg":105, "120kg":120, "120kg+":121};
-      
+      var new_options = {"59 kg": 59, "66 kg":66, "74 kg":74, "83 kg":83, "93 kg":93, "105 kg":105, "120 kg":120, "120 kg+":121};
+     
       var $cw = $("#weight_classes");
       $cw.empty();
       $('.grid-box input').val('');
@@ -69,30 +74,30 @@
     }
     else{
       var weight_classes = [47, 52, 57, 63, 69, 76, 84, 85]
-      var new_options = {"47kg":47, "52kg":52, "57kg":57, "63kg":63, "69kg":69, "76kg":76, "84kg":84, "84kg+":85}
+      var new_options = {"47 kg":47, "52 kg":52, "57 kg":57, "63 kg":63, "69 kg":69, "76 kg":76, "84 kg":84, "84 kg+":85}
 
       var $cw = $("#weight_classes");
       $cw.empty();
       $('.grid-box input').val('');
-      $('.grid-box .result-box p').text('0%');
+      $('.grid-box .result-box p').text('');
+
 
       $.each(new_options, function(key,value){
         $cw.append($("<option></option>").attr("value", value).text(key));
       });
     }
-    
+   
   });
-  
   </script>
 
 <script>
     $(document).ready(function(){
-      $('.wrapper').on('change', '.grid-box .input', function(){
+      $('.wrapper').on('change', '.grid-box .input-box .input', function(){
         if($("#weight_classes option:selected").is(":disabled")){
           return;
-        } 
+        }
 
-	       var val1 = $("#weight_classes option:selected").val();
+         var val1 = $("#weight_classes option:selected").val();
          var id = $(this).attr('id');
          var name = $(this).attr('name');
          var val2 = $("input[name*=" + name +"]").val();
@@ -103,7 +108,7 @@
           type: "get",
           data: {val1: val1, val2:val2, id:id, name:name, sex:sex},
           success: function(response) {
-            $(".wrapper .grid-box div:nth-of-type("+id+")").html('<p>'+response.result.toString()+"%"+'</p>');
+            $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+"You are stronger than "+response.result.toString()+"% of people in the "+val1+" kg weight class"+'</p>');
           },
          });
       });
@@ -116,7 +121,7 @@
          for (var i = 1; i <=3; i++){
             var id = i;
             var name = names[i-1];
-    
+   
             var val2 = $("input[name*=" + name +"]").val();
             if(val2.length!==0){
               changeAll(val1, id, name, val2, sex);
@@ -137,14 +142,10 @@
               type: "get",
               data: {val1: val1, val2:val2, id:id, name:name, sex:sex},
               success:function(response){
-                $(".wrapper .grid-box div:nth-of-type("+id+")").html('<p>'+response.result.toString()+"%"+'</p>');
+                $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+"You are stronger than "+response.result.toString()+"% of people in the "+val1+" kg weight class"+'</p>');
               }
             });
     }
-    
-
 </script>
 
-
 {% endblock%}
-

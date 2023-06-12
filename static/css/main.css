@@ -14,7 +14,11 @@ html, body {
 p{
     font-family:monospace;
     margin:0;
-    font-size:17px;
+    font-size:16px;
+}
+
+.class-selector{
+    height:30px;
 }
 
 .wrapper{
@@ -23,51 +27,43 @@ p{
 }
 .input-box{
     display:flex;
+    flex-direction: column;
     margin-top:10px;
 }
+
 .input{
     padding-right:0;
     border: 1px solid black;
-    border-right:0;
-    
-    line-height:2em;
-    padding:0.2em;
+    margin-top:10px;
+    height:30px;
+    font-size:16px;
 }
-.result-box{
-    border-style: solid;
-    border-width:thin;
-    border-left-color: gray;
 
-        
-    line-height:4vh;
+select{
+    font-size:16px;
+}
+
+input{
+    font-size:16px;
+}
+
+.result-box{
     padding:0.2em;
-    text-align:center;
-    width:4vh;
+    width:fit-content;
 }
 .grid-box{
     display: grid;
-    grid-template-areas:
-    "a b"
-    "c d"
-    "e f";
     margin-top: 20px;
-    grid-row-gap: 20px;
     grid-template-columns: 30vw;
-    grid-template-rows: 4vh;
-    grid-auto-rows: 4vh;
 }
 
-.class-selector{
-    height:4vh;
-}
 .navbar{
-    top:0%;
     width:100%;
-    
-    background-color:#fbb03b;
+    background-color:#dbd3a9;
     font-size:20px;
     padding-left:18px;
     padding-bottom:10px;
+    box-shadow: 0 1px 6px 0 rgba(0,0,0,.4);
 }
 
 .wrapper-title h2{
@@ -80,8 +76,8 @@ p{
 }
 
 .footer{
-    background-color: #fbb03b;
-        width: 100%;
+    background-color: #dbd3a9;
+    width: 100%;
     bottom: 0;
     padding: 1em;
     box-sizing: border-box;
@@ -101,26 +97,15 @@ p{
 @media only screen and (max-device-width:1240px){
     .grid-box{
         display: grid;
-        grid-template-areas:
-        "a b"
-        "c d"
-        "e f";
         margin-top: 20px;
-        grid-row-gap: 20px;
         grid-template-columns: 60vw;
-        grid-template-rows: 7vh;
-	grid-auto-rows: 7vh;
     }
     .result-box p{
-        font-size:12px;
+        font-size:14px;
     }
     .result-box{
-        font-size:12px;
-	line-height: 7vh;
-        width: 7vh;
-	height:7vh;
-	box-sizing:border-box;
-	text-align:center;
+        font-size:14px;	
+        box-sizing:border-box;
     }
     .wrapper-title{
         max-width: 50vw;
@@ -130,12 +115,8 @@ p{
         font-size:16px;
     }
     .input{
-	box-sizing:border-box;
-	height:7vh;
-	line-height:7vh;
+	    box-sizing:border-box;
+        height:30px;
 	}
 
-	.class-selector{
-	height:7vh;
-}
 }
