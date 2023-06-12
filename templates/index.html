@@ -8,7 +8,7 @@
 
 <div class ="navbar">
   <h2 class = "header-title">CompareStrength</h2>
-  <p>Compare your strength against 30k+ powerlifters</p>
+  <p>Compare your strength against 30,000 powerlifting competitors</p>
 </div>
 
 <div class = "wrapper">
@@ -67,7 +67,7 @@
   document.getElementById("sex").addEventListener("change", function() {
     if($(this).val()==="M"){
       /*There's bunch of repetition, make a function for the code below*/
-      var new_options = {"59 kg": 59, "66 kg":66, "74 kg":74, "83 kg":83, "93 kg":93, "105 kg":105, "120 kg":120, "120 kg+":121};
+      var new_options = {"Weight Class (kg)":"", "59 kg": 59, "66 kg":66, "74 kg":74, "83 kg":83, "93 kg":93, "105 kg":105, "120 kg":120, "120 kg+":121};
      
       var $cw = $("#weight_classes");
       $cw.empty();
@@ -77,20 +77,21 @@
       $.each(new_options, function(key, value){
         $cw.append($("<option></option>").attr("value", value).text(key));
       });
+      $("#weight_classes option:first").attr({"disabled": "true", "selected": "true", "hidden": true});
     }
     else{
       var weight_classes = [47, 52, 57, 63, 69, 76, 84, 85]
-      var new_options = {"47 kg":47, "52 kg":52, "57 kg":57, "63 kg":63, "69 kg":69, "76 kg":76, "84 kg":84, "84 kg+":85}
+      var new_options = {"Weight Class (kg)":"", "47 kg":47, "52 kg":52, "57 kg":57, "63 kg":63, "69 kg":69, "76 kg":76, "84 kg":84, "84 kg+":85}
 
       var $cw = $("#weight_classes");
       $cw.empty();
       $('.grid-box input').val('');
       $('.grid-box .result-box p').text('');
 
-
       $.each(new_options, function(key,value){
         $cw.append($("<option></option>").attr("value", value).text(key));
       });
+      $("#weight_classes option:first").attr({"disabled": "true", "selected": "true", "hidden": true});
     }
    
   });
