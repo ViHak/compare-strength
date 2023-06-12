@@ -94,6 +94,10 @@ input{
     margin-bottom: 15px;
 }
 
+.button-div{
+    margin-top:1em;
+}
+
 @media only screen and (max-device-width:1240px){
     .grid-box{
         display: grid;

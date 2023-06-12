@@ -52,6 +52,12 @@
             <div class = "result-box"></div>
           </div>
         </div>
+
+        <div class ="button-div">
+          <button type ="button" class ="reset-button" id ="reset-button">
+            Reset
+          </button>
+        </div>
 </div>
 <div class ="footer">
   <p>The data is from the <a href="https://www.kaggle.com/open-powerlifting/powerlifting-database">open powerlifting</a> database</p>
@@ -66,7 +72,7 @@
       var $cw = $("#weight_classes");
       $cw.empty();
       $('.grid-box input').val('');
-      $('.grid-box .result-box p').text('0%');
+      $('.grid-box .result-box p').text('');
 
       $.each(new_options, function(key, value){
         $cw.append($("<option></option>").attr("value", value).text(key));
@@ -148,4 +154,15 @@
     }
 </script>
 
+<script>
+  document.getElementById("reset-button").addEventListener("click", function() {
+      
+     var val1 = $("#weight_classes option:selected").html();
+     const $select = document.querySelector('#weight_classes');
+     $select.querySelectorAll('option')[0].selected = val1;
+
+     $('.grid-box input').val('');
+     $('.grid-box .result-box p').text('');
+ });
+</script>
 {% endblock%}
