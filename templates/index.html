@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block head %}
+     <meta name="description" content = "Compare your strength">
+     <meta name="keywords" content = "Compare strength, relative strength, how strong am I, comparestrength">
+     <title>Compare Strength</title>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 {% endblock%}
 
@@ -40,7 +43,6 @@
             <input type="text" id="1" name="squat" class ="input" placeholder="Squat one-rep-max (kg)">
             <div class = "result-box" id = "aha"></div>
           </div>
-
 
           <div class ="input-box">
             <input type="text" id="2" name="bench" class ="input" placeholder="Bench press one-rep-max (kg)">
@@ -100,14 +102,16 @@
 <script>
     $(document).ready(function(){
       $('.wrapper').on('change', '.grid-box .input-box .input', function(){
-        if($("#weight_classes option:selected").is(":disabled")){
+        /*Checks that the user has chosen a weight class or that their input is of correct type*/ 
+        if($("#weight_classes option:selected").is(":disabled")||(!$.isNumeric($(this).val()))){
+          $(".wrapper .grid-box .input-box:nth-of-type("+$(this).attr('id')+") .result-box").html('<p>'+""+'</p>');
           return;
         }
 
          var val1 = $("#weight_classes option:selected").val();
          var id = $(this).attr('id');
          var name = $(this).attr('name');
-         var val2 = $("input[name*=" + name +"]").val();
+         var val2 = $(this).val();
          var sex = $("#sex").val();
         
          $.ajax({
@@ -115,7 +119,7 @@
           type: "get",
           data: {val1: val1, val2:val2, id:id, name:name, sex:sex},
           success: function(response) {
-            $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+"You are stronger than "+response.result.toString()+"% of people in the "+val1+" kg weight class"+'</p>');
+            $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+"You can "+name+" more than "+response.result.toString()+"% of people in the "+val1+" kg weight class"+'</p>');
           },
          });
       });
