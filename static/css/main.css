@@ -17,10 +17,6 @@ p{
     font-size:16px;
 }
 
-.class-selector{
-    height:30px;
-}
-
 .wrapper{
     display: inline-grid;
     margin: 1em;
@@ -35,12 +31,13 @@ p{
     padding-right:0;
     border: 1px solid black;
     margin-top:10px;
-    height:30px;
+    height:40px;
     font-size:16px;
 }
 
 select{
     font-size:16px;
+    height:40px;
 }
 
 input{
@@ -54,7 +51,6 @@ input{
 .grid-box{
     display: grid;
     margin-top: 20px;
-    grid-template-columns: 30vw;
 }
 
 .navbar{
@@ -72,7 +68,6 @@ input{
 }
 
 .wrapper-title{
-    max-width: 35vw;
 }
 
 .footer{
@@ -90,12 +85,18 @@ input{
 }
 
 .sex{
-    padding:1em 0em;
     margin-bottom: 15px;
 }
 
-.button-div{
+.button-div button{
     margin-top:1em;
+    cursor:pointer;
+}
+
+button{
+    cursor:pointer;
+    padding: 5px 15px;
+    
 }
 
 @media only screen and (max-device-width:1240px){
