@@ -20,6 +20,7 @@ p{
 .wrapper{
     display: inline-grid;
     margin: 1em;
+    width:40vw;
 }
 .input-box{
     display:flex;
@@ -54,11 +55,9 @@ input{
 }
 
 .navbar{
-    width:100%;
     background-color:#dbd3a9;
+    padding:0em 1em 1em 1em;
     font-size:20px;
-    padding-left:18px;
-    padding-bottom:10px;
     box-shadow: 0 1px 6px 0 rgba(0,0,0,.4);
 }
 
@@ -89,21 +88,37 @@ input{
 }
 
 .button-div button{
-    margin-top:1em;
     cursor:pointer;
+    border-radius:5px;
+    border:none;
+    box-shadow:0px 1px 2px 0px black;
+    font-size:16px;
+    transition: 0.2s ease;
+}
+
+.button-div button:hover{
+    background-color:#dbd7d7;
+}
+
+.button-div{
+    margin-top:2em;
 }
 
 button{
-    cursor:pointer;
-    padding: 5px 15px;
-    
+    padding: 10px 25px;
+}
+
+select{
+    cursor: pointer;
 }
 
 @media only screen and (max-device-width:1240px){
+    .wrapper{
+        width:80vw;
+    }
     .grid-box{
         display: grid;
         margin-top: 20px;
-        grid-template-columns: 60vw;
     }
     .result-box p{
         font-size:14px;
@@ -112,16 +127,16 @@ button{
         font-size:14px;	
         box-sizing:border-box;
     }
-    .wrapper-title{
-        max-width: 50vw;
-    }
     .wrapper-title h2{
         margin-top:0;
-        font-size:16px;
+        font-size:17px;
     }
     .input{
 	    box-sizing:border-box;
         height:30px;
 	}
+    p{
+        font-size:15px;
+    }
 
 }
