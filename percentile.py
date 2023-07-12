@@ -28,7 +28,7 @@ def pick_weight_class(sex):
     return weight_classes
 
 def change_data(weight_class, weight_classes, hf):
-    match weight_classes:
+    match weight_class:
         # Since 59 is the smallest male weight class and there are no weight classes below that,
         # all rows, in which the field8 (Bodyweight) column's values are smaller than or equal to 59,
         # will be chosen. Same logic with the super heavyweight weight-classes. 
