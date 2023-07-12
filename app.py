@@ -21,11 +21,11 @@ async def index(request: Request):
 
 @app.get('/get_percentile')
 def get_percentile(request: Request):
-    bw = int(request.query_params['val1'])
-    bench = int(request.query_params.get('val2'))
-    name = (request.query_params.get('name'))
+    weight_class = int(request.query_params.get('weight_class'))
+    lifted_weight = int(request.query_params.get('lifted_weight'))
+    lift = (request.query_params.get('lift'))
     sex = request.query_params.get('sex')
-    score = percentile_of_score(bw, bench, name, sex)
+    score = percentile_of_score(weight_class, lifted_weight, lift, sex)
     
     return ({"result":score})
 

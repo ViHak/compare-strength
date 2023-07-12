@@ -107,53 +107,58 @@
           $(".wrapper .grid-box .input-box:nth-of-type("+$(this).attr('id')+") .result-box").html('<p>'+""+'</p>');
           return;
         }
-
-         var val1 = $("#weight_classes option:selected").val();
+         
+         var weight_class = $("#weight_classes option:selected").val();
+         /*The user's chosen weight class with the unit of measurement displayed next to it. E.g. 74 kg*/
+         var weight_class_kg = $("#weight_classes option:selected").text();
          var id = $(this).attr('id');
-         var name = $(this).attr('name');
-         var val2 = $(this).val();
+         var lift = $(this).attr('name');
+         /*User's input (one-rep-maximum)*/
+         var lifted_weight = $(this).val();
          var sex = $("#sex").val();
         
          $.ajax({
           url: "/get_percentile",
           type: "get",
-          data: {val1: val1, val2:val2, id:id, name:name, sex:sex},
+          data: {weight_class: weight_class, weight_class_kg:weight_class_kg, lifted_weight:lifted_weight, id:id, lift:lift, sex:sex},
           success: function(response) {
-            $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+"You can "+name+" more than " +'<b>'+response.result.toString()+"%"+'</b>'+" of people in the "+'<b>'+val1+" kg "+'</b>'+ "weight class"+'</p>');
+            $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+"You can "+lift+" more than " +'<b>'+response.result.toString()+"%"+'</b>'+" of people in the "+'<b>'+weight_class_kg+' </b>'+ "weight class"+'</p>');
           },
          });
       });
     });
     $(document).ready(function(){
       $('.wrapper').on('change', '#weight_classes', function(){
-         var val1 = $("#weight_classes option:selected").val();
+         var weight_class = $("#weight_classes option:selected").val();
+         var weight_class_kg = $("#weight_classes option:selected").text();
          var sex = $("#sex").val();
          var names = ["squat", "bench", "deadlift"];
          for (var i = 1; i <=3; i++){
             var id = i;
-            var name = names[i-1];
+            var lift = names[i-1];
    
-            var val2 = $("input[name*=" + name +"]").val();
-            if(val2.length!==0){
-              changeAll(val1, id, name, val2, sex);
+            var lifted_weight = $("input[name*=" + lift +"]").val();
+            if(lifted_weight.length!==0){
+              changeAll(weight_class, weight_class_kg, id, lift, lifted_weight, sex);
             }
         }
       });
     });
 
-    function changeAll(val1, id, name, val2, sex){
-      var val1 = val1;
+    function changeAll(weight_class, weight_class_kg, id, lift, lifted_weight, sex){
+      var weight_class = weight_class;
+      var weight_class_kg = weight_class_kg;
       var id = id;
-      var name = name;
-      var val2 = val2;
+      var lift = lift;
+      var lifted_weight = lifted_weight;
       var sex = sex;
 
       $.ajax({
               url: "/get_percentile",
               type: "get",
-              data: {val1: val1, val2:val2, id:id, name:name, sex:sex},
+              data: {weight_class, weight_class_kg: weight_class_kg, lifted_weight:lifted_weight, id:id, lift:lift, sex:sex},
               success:function(response){
-                $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+"You can "+name+" more than " +'<b>'+response.result.toString()+"%"+'</b>'+" of people in the "+'<b>'+val1+" kg "+'</b>'+ "weight class"+'</p>');
+                $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+"You can "+lift+" more than " +'<b>'+response.result.toString()+"%"+'</b>'+" of people in the "+'<b>'+weight_class_kg+' </b>'+ "weight class"+'</p>');
               }
             });
     }
