@@ -8,6 +8,8 @@ Currently the data contains results from both drug-tested and non-drug-tested po
 
 This project can be ran locally but you can also try it [here](https://comparestrength.com/). The website is hosted on an Ubuntu-based VPS and it's built on [FastAPI](https://github.com/tiangolo/fastapi). [Gunicorn](https://github.com/benoitc/gunicorn) is being used as a process manager for the Uvicorn workers.
 
+Data source: [https://www.kaggle.com/datasets/open-powerlifting/powerlifting-database](https://www.kaggle.com/datasets/open-powerlifting/powerlifting-database)
+
 ## Installing and running the project
 
 ```
