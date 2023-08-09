@@ -8,7 +8,7 @@ from scipy.stats import percentileofscore
 db_path = 'powerlifting.db'
 conn = 'sqlite://'+db_path
 
-query = """SELECT field2, field4, field8, field14, field24, field19
+query = """SELECT field2, field4, field8, field14, field24, field19, field31
 FROM openpowerlifting"""
 
 df = pl.read_database(query, conn)[1:,:]
@@ -72,9 +72,20 @@ def correct_field(hf, lift):
 def select_sex(sex):
     return df.filter(pl.col("field2")==sex)
 
-def percentile_of_score(weight_class, bench, lift, sex):
+#def select_division(division):
+ #   if(division == "tested"):
+  #      return df.filter(pl.col("field31")=="Yes")
+   # else:
+    #    return df
+
+def percentile_of_score(weight_class, bench, lift, sex, division):
 
     df = select_sex(sex)
+    # Add this so that can change weight class on the fly
+    print(division)
+    if(division == "tested"):
+        # Mby doesn't like string
+        df =  df.filter(pl.col("field31")=="Yes")
 
     weight_classes = pick_weight_class(sex)
 

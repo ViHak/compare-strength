@@ -37,6 +37,12 @@
           <option value="120">120 kg</option>
           <option value="121">120 kg+</option>
         </select>
+
+        <!-- <label for ="division">Division</label> -->
+        <select name="division" id = "division" class = "division">
+          <option value ="tested">Drug-tested results</option>
+          <option value ="non_tested">All results</option>
+        </select>
    
         <div class = "grid-box">
           <div class ="input-box">
@@ -62,7 +68,7 @@
         </div>
 </div>
 <div class ="footer">
-  <p>The data is from the <a href="https://www.kaggle.com/open-powerlifting/powerlifting-database">open powerlifting</a> database</p>
+  <p>The data is from the <a href="https://www.kaggle.com/open-powerlifting/powerlifting-database">open powerlifting</a>database</p>
 </div>
 
 <script>
@@ -116,47 +122,73 @@
          /*User's input (one-rep-maximum)*/
          var lifted_weight = $(this).val();
          var sex = $("#sex").val();
+         var division = $("#division").val();
         
          $.ajax({
           url: "/get_percentile",
           type: "get",
-          data: {weight_class: weight_class, weight_class_kg:weight_class_kg, lifted_weight:lifted_weight, id:id, lift:lift, sex:sex},
+          data: {weight_class: weight_class, weight_class_kg:weight_class_kg, lifted_weight:lifted_weight, id:id, lift:lift, sex:sex, division:division},
           success: function(response) {
             $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+"You can "+lift+" more than " +'<b>'+response.result.toString()+"%"+'</b>'+" of people in the "+'<b>'+weight_class_kg+' </b>'+ "weight class"+'</p>');
           },
          });
       });
     });
+    
     $(document).ready(function(){
       $('.wrapper').on('change', '#weight_classes', function(){
          var weight_class = $("#weight_classes option:selected").val();
          var weight_class_kg = $("#weight_classes option:selected").text();
          var sex = $("#sex").val();
          var names = ["squat", "bench", "deadlift"];
+         var division = $("#division").val();
+         
          for (var i = 1; i <=3; i++){
             var id = i;
             var lift = names[i-1];
-   
             var lifted_weight = $("input[name*=" + lift +"]").val();
+
             if(lifted_weight.length!==0){
-              changeAll(weight_class, weight_class_kg, id, lift, lifted_weight, sex);
+              changeAll(weight_class, weight_class_kg, id, lift, lifted_weight, sex, division);
             }
         }
       });
     });
 
-    function changeAll(weight_class, weight_class_kg, id, lift, lifted_weight, sex){
+    $(document).ready(function(){
+      $('.wrapper').on('change', '#division', function(){
+         var weight_class = $("#weight_classes option:selected").val();
+         var weight_class_kg = $("#weight_classes option:selected").text();
+         var sex = $("#sex").val();
+         var names = ["squat", "bench", "deadlift"];
+         var division = $("#division").val();
+
+         for (var i = 1; i <=3; i++){
+            var id = i;
+            var lift = names[i-1];
+            var lifted_weight = $("input[name*=" + lift +"]").val();
+
+            if(lifted_weight.length!==0){
+              changeAll(weight_class, weight_class_kg, id, lift, lifted_weight, sex, division);
+            }
+        }
+      });
+    });
+
+
+    function changeAll(weight_class, weight_class_kg, id, lift, lifted_weight, sex, division){
       var weight_class = weight_class;
       var weight_class_kg = weight_class_kg;
       var id = id;
       var lift = lift;
       var lifted_weight = lifted_weight;
       var sex = sex;
+      var division = division;
 
       $.ajax({
               url: "/get_percentile",
               type: "get",
-              data: {weight_class, weight_class_kg: weight_class_kg, lifted_weight:lifted_weight, id:id, lift:lift, sex:sex},
+              data: {weight_class, weight_class_kg: weight_class_kg, lifted_weight:lifted_weight, id:id, lift:lift, sex:sex, division:division},
               success:function(response){
                 $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+"You can "+lift+" more than " +'<b>'+response.result.toString()+"%"+'</b>'+" of people in the "+'<b>'+weight_class_kg+' </b>'+ "weight class"+'</p>');
               }

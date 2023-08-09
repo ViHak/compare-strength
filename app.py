@@ -14,7 +14,6 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-
 @app.get('/')
 async def index(request: Request):
     return templates.TemplateResponse('index.html', {"request":request})
@@ -25,10 +24,10 @@ def get_percentile(request: Request):
     lifted_weight = int(request.query_params.get('lifted_weight'))
     lift = (request.query_params.get('lift'))
     sex = request.query_params.get('sex')
-    score = percentile_of_score(weight_class, lifted_weight, lift, sex)
+    division = request.query_params.get('division')
+    score = percentile_of_score(weight_class, lifted_weight, lift, sex, division)
     
     return ({"result":score})
 
 if __name__ == "__main__":
    uvicorn.run("app:app")
-    
