@@ -23,5 +23,5 @@ You can also run the project programmatically with the IDE of your choice - simp
 ### Features
 
 - [x] Choose gender
-- [ ] Filter results from tested and un-tested competitions
+- [x] Filter results from tested and un-tested competitions
 - [ ] A toggle switch with the option to input percentile instead of a weight value. E.g. the user can choose to input a number x from the range [0, 100] to see how much they'd have to lift to be stronger than x% of people in their chosen weight class.
