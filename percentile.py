@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import polars as pl
 from scipy.stats import percentileofscore
+from scipy.stats import scoreatpercentile
+
 
 db_path = 'powerlifting.db'
 conn = 'sqlite://'+db_path
@@ -70,28 +72,24 @@ def correct_field(hf, lift):
             return hf.select("field24")
 
 def select_sex(sex):
-    return df.filter(pl.col("field2")==sex)
+    return df.filter(pl.col("field2") == sex)
 
-#def select_division(division):
- #   if(division == "tested"):
-  #      return df.filter(pl.col("field31")=="Yes")
-   # else:
-    #    return df
-
-def percentile_of_score(weight_class, bench, lift, sex, division):
-
+# TODO: lifted_weight is a bit misleading as a variable name because it can also
+# be a percentile
+def percentile_of_score(weight_class, lifted_weight, lift, sex, division, calculating_method):
     df = select_sex(sex)
-    # Add this so that can change weight class on the fly
-    print(division)
     if(division == "tested"):
-        # Mby doesn't like string
-        df =  df.filter(pl.col("field31")=="Yes")
+        df =  df.filter(pl.col("field31") == "Yes")
 
     weight_classes = pick_weight_class(sex)
 
     df = change_data(weight_class, weight_classes, df)
-
-    lift_df = correct_field(df, lift)
-
-    percentile = percentileofscore(lift_df.to_pandas().squeeze(), int(bench), kind = "weak")
-    return round(percentile, 0)
+    lift_df = correct_field(df, lift) 
+    if(calculating_method == "weight-at-percentile"):
+        # Calculates the amount of weight that needs to be lifted in order to be in the top x percentile
+        # of the user's chosen weight class, where x is the user's given percentile
+        result = scoreatpercentile(lift_df.to_pandas().squeeze(), int(lifted_weight))
+        return f"You'd have to {lift} more than {round(result)} kg to be stronger than {lifted_weight}% of people in the {weight_class} kg weight class"
+    else:
+        result = percentileofscore(lift_df.to_pandas().squeeze(), int(lifted_weight), kind = "weak")
+        return f"You can {lift} more than {round(result)}% of people in the {weight_class} kg weight class"
