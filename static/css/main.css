@@ -72,6 +72,9 @@ input{
     bottom: 0;
     padding: 1em;
     box-sizing: border-box;
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
 }
 
 .header-title{
