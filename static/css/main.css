@@ -112,9 +112,13 @@ select{
     cursor: pointer;
 }
 
+.percentile-guide{
+    display:none;
+}
+
 @media only screen and (max-device-width:1240px){
     .wrapper{
-        width:80vw;
+        width:90vw;
     }
     .grid-box{
         display: grid;
