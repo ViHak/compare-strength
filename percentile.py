@@ -89,4 +89,4 @@ def percentile_of_score(weight_class, lifted_weight, lift, sex, division, calcul
         return f"You'd have to {lift} more than {round(result)} kg to be stronger than {lifted_weight}% of people in the {weight_class} kg weight class"
     else:
         result = percentileofscore(lift_df.to_pandas().squeeze(), int(lifted_weight), kind = "weak")
-        return f"You can {lift} more than \033[1m'+ {round(result)}% of people in the {weight_class} kg weight class"
+        return f"You can {lift} more than {round(result)}% of people in the {weight_class} kg weight class"

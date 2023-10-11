@@ -31,6 +31,7 @@ p{
 select{
     font-size:16px;
     height:40px;
+    border-radius:5px;
 }
 
 input{
@@ -39,6 +40,8 @@ input{
     margin-top:10px;
     height:40px;
     font-size:16px;
+    border-radius:5px;
+    padding:5px;
 
 }
 
@@ -72,6 +75,7 @@ input{
     display: grid;
     grid-auto-columns: 1fr;
     grid-auto-flow: column;
+    font-family: sans-serif;
 }
 
 .header-title{
@@ -121,20 +125,15 @@ select{
         display: grid;
         margin-top: 20px;
     }
-    .result-box p{
-        font-size:14px;
-    }
     .result-box{
-        font-size:14px;	
         box-sizing:border-box;
     }
     .wrapper-title h2{
         margin-top:0;
-        font-size:17px;
+        font-size:18px;
     }
     .input{
 	    box-sizing:border-box;
-        height:30px;
 	}
     p{
         font-size:15px;
