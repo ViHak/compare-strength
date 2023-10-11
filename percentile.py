@@ -15,10 +15,9 @@ FROM openpowerlifting"""
 
 df = pl.read_database(query, conn)[1:,:]
 
-# The field8 column has the lifter's bodyweight. Other columns are casted to float
-# later as needed, since only one lift is looked at a time. For example, float casting
-# the column that contains the lifters' squat one-rep-maxes would be unnecessary if the user
-# inputs their bench press one-rep-max, instead. See the correct_field() function.
+# The field8 column has the lifter's bodyweight. Other columns (lifts) are casted to float
+# later as needed. Only one lift is looked at a time so float casting all of them
+# would be unnecessary
 df = df.with_columns(pl.col('field8').cast(pl.Float32, strict=False))
 
 def pick_weight_class(sex):
@@ -74,8 +73,6 @@ def correct_field(hf, lift):
 def select_sex(sex):
     return df.filter(pl.col("field2") == sex)
 
-# TODO: lifted_weight is a bit misleading as a variable name because it can also
-# be a percentile
 def percentile_of_score(weight_class, lifted_weight, lift, sex, division, calculating_method):
     df = select_sex(sex)
     if(division == "tested"):
@@ -92,4 +89,4 @@ def percentile_of_score(weight_class, lifted_weight, lift, sex, division, calcul
         return f"You'd have to {lift} more than {round(result)} kg to be stronger than {lifted_weight}% of people in the {weight_class} kg weight class"
     else:
         result = percentileofscore(lift_df.to_pandas().squeeze(), int(lifted_weight), kind = "weak")
-        return f"You can {lift} more than {round(result)}% of people in the {weight_class} kg weight class"
+        return f"You can {lift} more than \033[1m'+ {round(result)}% of people in the {weight_class} kg weight class"

@@ -19,7 +19,6 @@
     <h2>Select your weight class and input your best lifts</h2>
 </div>
 
-        <label for = "sex">Sex</label>
         <select name = "sex" id = "sex" class = "sex">
           <option value = "M">Male</option>
           <option value = "F">Female</option>
@@ -47,8 +46,6 @@
           <option value = "percentile-of-lift">Percentile of lift</option>
           <option value = "weight-at-percentile">Lift at percentile</option>
         </select>        
-        <div class ="percentile-guide" id ="percentile-guide">^For example, an input of 70 will output how much weight you need to lift in
-           order to be in the top 70 percentile of your chosen weight class</div>
         <div class = "grid-box">
           <div class = "input-box">
             <input type= "text" id = "1" name = "squat" class = "input" placeholder = "Squat one-rep-max (kg)">
@@ -116,13 +113,11 @@
       $('.grid-box input').eq(0).attr('placeholder', 'Input the percentile [1-100] for the squat');
       $('.grid-box input').eq(1).attr('placeholder', 'Input the percentile [1-100] for the bench press');
       $('.grid-box input').eq(2).attr('placeholder', 'Input the percentile [1-100] for the deadlift');
-      $('#percentile-guide').show();
     }
     else{
       $('.grid-box input').eq(0).attr('placeholder', 'Squat one-rep-max (kg)');
       $('.grid-box input').eq(1).attr('placeholder', 'Bench press one-rep-max (kg)');
       $('.grid-box input').eq(2).attr('placeholder', 'Deadlift one-rep-max (kg)');
-      $('#percentile-guide').hide();
     }
     $('.grid-box input').val('');
     $('.grid-box .result-box p').text('');
