@@ -10,75 +10,80 @@ from scipy.stats import scoreatpercentile
 db_path = 'powerlifting.db'
 conn = 'sqlite://'+db_path
 
-query = """SELECT field2, field4, field8, field14, field24, field19, field31
+query = """SELECT 
+sex, 
+equipment, 
+bodyweight, 
+squat_max, 
+deadlift_max, 
+bench_max, 
+drug_tested
 FROM openpowerlifting"""
 
 df = pl.read_database(query, conn)[1:,:]
 
-# The field8 column has the lifter's bodyweight. Other columns (lifts) are casted to float
-# later as needed. Only one lift is looked at a time so float casting all of them
+# Other columns (lifts) are casted to float later as needed. 
+# Only one lift is looked at a time, so float casting all of them
 # would be unnecessary
-df = df.with_columns(pl.col('field8').cast(pl.Float32, strict=False))
+df = df.with_columns(pl.col('bodyweight').cast(pl.Float32, strict=False))
 
-def pick_weight_class(sex):
-    if(sex=="M"):
-        weight_classes = [59, 66, 74, 83, 93, 105, 120, 121]
-    else:
-        weight_classes = [47, 52, 57, 63, 69, 76, 84, 85]    
-
-    return weight_classes
+WEIGHT_CLASSES = {
+    "M":[59, 66, 74, 83, 93, 105, 120, 121],
+    "F":[47, 52, 57, 63, 69, 76, 84, 85]
+}
 
 def change_data(weight_class, weight_classes, hf):
     match weight_class:
-        # Since 59 is the smallest male weight class and there are no weight classes below that,
-        # all rows, in which the field8 (Bodyweight) column's values are smaller than or equal to 59,
-        # will be chosen. Same logic with the super heavyweight weight-classes. 
+        # Edge cases where the chosen weight class is either the smallest or largest
+        # weight class of the chosen sex.
         case 59:
-            return hf.filter((pl.col("field8")<=59))
+            return hf.filter((pl.col("bodyweight")<=59))
         case 121:
-            return hf.filter((pl.col("field8")>120))
+            return hf.filter((pl.col("bodyweight")>120))
         case 47:
-            return hf.filter((pl.col("field8")<=47))
+            return hf.filter((pl.col("bodyweight")<=47))
         case 85:
-            return hf.filter((pl.col("field8")>84))
-        # Example: If the 74kg weight class is chosen, the lifters bodyweight can be anything in the range of ]66, 74] kg.
+            return hf.filter((pl.col("bodyweight")>84))
+        
+        # If the chosen weight class is between two weight classes (i.e., not the smallest or highest weight class),
+        # all rows between )weight_class_
         case _:
-            return hf.filter((pl.col("field8")>weight_classes[weight_classes.index(weight_class)-1]) & (pl.col("field8")<= weight_classes[weight_classes.index(weight_class)]))
+            return hf.filter((pl.col("bodyweight")>weight_classes[weight_classes.index(weight_class)-1]) & (pl.col("bodyweight")<= weight_classes[weight_classes.index(weight_class)]))
 
 # Depending on the lift the user has chosen, the column that consists of the values of said lift
 # will be casted to float and also cleaned from null values, so that the percentile can later be calculated.
 def correct_field(hf, lift):
     match lift:
         case "bench":
-            hf = hf.with_columns(pl.col('field19').cast(pl.Float32, strict=False))
-            hf = hf.filter(pl.col("field19")>0)
-            hf = hf.drop_nulls(subset=['field19'])
+            hf = hf.with_columns(pl.col('bench_max').cast(pl.Float32, strict=False))
+            hf = hf.filter(pl.col("bench_max")>0)
+            hf = hf.drop_nulls(subset=['bench_max'])
             
-            return hf.select("field19")
+            return hf.select("bench_max")
         
         case "squat":
-            hf = hf.with_columns(pl.col('field14').cast(pl.Float32, strict=False))
-            hf = hf.filter((pl.col("field14")>0)&(pl.col("field4")=="Raw"))
-            hf = hf.drop_nulls(subset=['field14'])
+            hf = hf.with_columns(pl.col('squat_max').cast(pl.Float32, strict=False))
+            hf = hf.filter((pl.col("squat_max")>0)&(pl.col("equipment")=="Raw"))
+            hf = hf.drop_nulls(subset=['squat_max'])
             
-            return hf.select("field14")
+            return hf.select("squat_max")
         
         case "deadlift":
-            hf = hf.with_columns(pl.col('field24').cast(pl.Float32, strict=False))
-            hf = hf.filter((pl.col("field24")>0))
-            hf = hf.drop_nulls(subset=['field24'])
+            hf = hf.with_columns(pl.col('deadlift_max').cast(pl.Float32, strict=False))
+            hf = hf.filter((pl.col("deadlift_max")>0))
+            hf = hf.drop_nulls(subset=['deadlift_max'])
 
-            return hf.select("field24")
+            return hf.select("deadlift_max")
 
 def select_sex(sex):
-    return df.filter(pl.col("field2") == sex)
+    return df.filter(pl.col("sex") == sex)
 
 def percentile_of_score(weight_class, lifted_weight, lift, sex, division, calculating_method):
     df = select_sex(sex)
     if(division == "tested"):
-        df =  df.filter(pl.col("field31") == "Yes")
+        df =  df.filter(pl.col("drug_tested") == "Yes")
 
-    weight_classes = pick_weight_class(sex)
+    weight_classes = WEIGHT_CLASSES[sex]
 
     df = change_data(weight_class, weight_classes, df)
     lift_df = correct_field(df, lift) 
