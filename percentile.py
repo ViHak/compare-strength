@@ -6,6 +6,10 @@ import polars as pl
 from scipy.stats import percentileofscore
 from scipy.stats import scoreatpercentile
 
+WEIGHT_CLASSES = {
+    "M":[59, 66, 74, 83, 93, 105, 120, 121],
+    "F":[47, 52, 57, 63, 69, 76, 84, 85]
+}
 
 db_path = 'powerlifting.db'
 conn = 'sqlite://'+db_path
@@ -20,17 +24,7 @@ bench_max,
 drug_tested
 FROM openpowerlifting"""
 
-df = pl.read_database(query, conn)[1:,:]
-
-# Other columns (lifts) are casted to float later as needed. 
-# Only one lift is looked at a time, so float casting all of them
-# would be unnecessary
-df = df.with_columns(pl.col('bodyweight').cast(pl.Float32, strict=False))
-
-WEIGHT_CLASSES = {
-    "M":[59, 66, 74, 83, 93, 105, 120, 121],
-    "F":[47, 52, 57, 63, 69, 76, 84, 85]
-}
+df = pl.read_database(query, conn).with_columns(pl.col('bodyweight').cast(pl.Float32, strict=False))
 
 def change_data(weight_class, weight_classes, hf):
     match weight_class:
@@ -55,25 +49,12 @@ def change_data(weight_class, weight_classes, hf):
 def correct_field(hf, lift):
     match lift:
         case "bench":
-            hf = hf.with_columns(pl.col('bench_max').cast(pl.Float32, strict=False))
-            hf = hf.filter(pl.col("bench_max")>0)
-            hf = hf.drop_nulls(subset=['bench_max'])
-            
-            return hf.select("bench_max")
-        
+            return hf.select(pl.col('bench_max').cast(pl.Float32, strict=False)).filter(pl.col('bench_max')>0).drop_nulls(subset=['bench_max'])
         case "squat":
-            hf = hf.with_columns(pl.col('squat_max').cast(pl.Float32, strict=False))
-            hf = hf.filter((pl.col("squat_max")>0)&(pl.col("equipment")=="Raw"))
-            hf = hf.drop_nulls(subset=['squat_max'])
-            
-            return hf.select("squat_max")
-        
+            hf = hf.filter(pl.col("equipment")=="Raw")
+            return hf.select(pl.col('squat_max').cast(pl.Float32, strict=False)).filter(pl.col("squat_max")>0).drop_nulls(subset=['squat_max'])
         case "deadlift":
-            hf = hf.with_columns(pl.col('deadlift_max').cast(pl.Float32, strict=False))
-            hf = hf.filter((pl.col("deadlift_max")>0))
-            hf = hf.drop_nulls(subset=['deadlift_max'])
-
-            return hf.select("deadlift_max")
+            return hf.select(pl.col('deadlift_max').cast(pl.Float32, strict=False)).filter(pl.col('deadlift_max')>0).drop_nulls(subset=['deadlift_max'])
 
 def select_sex(sex):
     return df.filter(pl.col("sex") == sex)
