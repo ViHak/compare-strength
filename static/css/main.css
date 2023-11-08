@@ -6,6 +6,9 @@ body {
 a:visited{
     color:#45c1ff;
 }
+a{
+    color:#69b4ff;
+}
 
 html, body {
     max-width: 100%;
@@ -25,7 +28,6 @@ p{
 .input-box{
     display:flex;
     flex-direction: column;
-    margin-top:10px;
 }
 
 select{
@@ -35,7 +37,7 @@ select{
     border: 2px solid #3f5a36;
 }
 
-input{
+.input-box input{
     font-size:16px;
     border: 2px solid #3f5a36;
     margin-top:10px;
@@ -56,7 +58,7 @@ input:hover{
 }
 .grid-box{
     display: grid;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .navbar{
@@ -69,7 +71,7 @@ input:hover{
 
 .wrapper-title h2{
     margin-top:0;
-    font-size:22px;
+    font-size:20px;
 }
 
 .footer{
@@ -90,8 +92,8 @@ input:hover{
     padding-top: 10px;
 }
 
-select{
-    margin-bottom:15px;
+select:not(:first-of-type){
+    margin-top:15px;
 }
 
 .button-div button{
@@ -120,6 +122,28 @@ select{
 }
 
 .percentile-guide{
+    display:none;
+}
+
+.advanced-options{
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.advanced-options input{
+    height:17px;
+    width:17px;
+}
+
+.division{
+    visibility: hidden;
+    display:none;
+}
+
+.percentile{
+    visibility: hidden;
     display:none;
 }
 

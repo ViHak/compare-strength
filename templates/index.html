@@ -45,7 +45,11 @@
         <select name = "percentile" id = "percentile" class = "percentile">
           <option value = "percentile-of-lift">Percentile of lift</option>
           <option value = "weight-at-percentile">Lift at percentile</option>
-        </select>        
+        </select>
+        <div class = "advanced-options">
+          <label for = "checkbox">Advanced options</label>
+          <input type = "checkbox" id = "checkbox">
+        </div>
         <div class = "grid-box">
           <div class = "input-box">
             <input type= "text" id = "1" name = "squat" class = "input" placeholder = "Squat one-rep-max (kg)">
@@ -104,6 +108,22 @@
       });
       $("#weight_classes option:first").attr({"disabled": "true", "selected": "true", "hidden": true});
     }
+  });
+  document.getElementById("checkbox").addEventListener("change", function() {
+    if(this.checked){
+      document.getElementById ("division").style.visibility ="visible";
+      document.getElementById ("division").style.display ="inline-block";
+      document.getElementById ("percentile").style.visibility ="visible";
+      document.getElementById ("percentile").style.display ="inline-block";
+
+    }
+    else{
+      document.getElementById ("division").style.visibility ="hidden";
+      document.getElementById ("division").style.display ="none";
+      document.getElementById ("percentile").style.visibility ="hidden";
+      document.getElementById ("percentile").style.display ="none";
+
+    }    
   });
   </script>
 
