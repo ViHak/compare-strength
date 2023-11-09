@@ -46,9 +46,10 @@
           <option value = "percentile-of-lift">Percentile of lift</option>
           <option value = "weight-at-percentile">Lift at percentile</option>
         </select>
-        <div class = "advanced-options">
-          <label for = "checkbox">Advanced options</label>
-          <input type = "checkbox" id = "checkbox">
+        <div class="toggle-switch">
+          <label for="toggle" class="toggle-label">Advanced options</label>
+          <input id="toggle" type="checkbox" />
+          <label for="toggle" class="switch"></label>
         </div>
         <div class = "grid-box">
           <div class = "input-box">
@@ -109,7 +110,7 @@
       $("#weight_classes option:first").attr({"disabled": "true", "selected": "true", "hidden": true});
     }
   });
-  document.getElementById("checkbox").addEventListener("change", function() {
+  document.getElementById("toggle").addEventListener("change", function() {
     if(this.checked){
       document.getElementById ("division").style.visibility ="visible";
       document.getElementById ("division").style.display ="inline-block";
@@ -122,7 +123,6 @@
       document.getElementById ("division").style.display ="none";
       document.getElementById ("percentile").style.visibility ="hidden";
       document.getElementById ("percentile").style.display ="none";
-
     }    
   });
   </script>
