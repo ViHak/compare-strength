@@ -9,21 +9,6 @@ WEIGHT_CLASSES = {
     "F":[47, 52, 57, 63, 69, 76, 84, 85]
 }
 
-db_path = 'powerlifting.db'
-conn = 'sqlite://'+db_path
-
-query = """SELECT 
-sex, 
-equipment, 
-bodyweight, 
-squat_max, 
-deadlift_max, 
-bench_max, 
-drug_tested
-FROM openpowerlifting"""
-
-df = pl.read_database(query, conn).with_columns(pl.col('bodyweight'))
-
 def change_data(weight_class, weight_classes, hf):
     match weight_class:
         # Edge cases where the chosen weight class is either the smallest or largest
@@ -54,11 +39,9 @@ def correct_field(hf, lift):
         case "deadlift":
             return hf.select(pl.col('deadlift_max')).filter(pl.col('deadlift_max')>0).drop_nulls(subset=['deadlift_max'])
 
-def select_sex(sex):
-    return df.filter(pl.col("sex") == sex)
-
-def percentile_of_score(weight_class, lifted_weight, lift, sex, division, calculating_method):
-    df = select_sex(sex)
+def percentile_of_score(df, weight_class, lifted_weight, lift, sex, division, calculating_method):
+    df = df.filter(pl.col("sex") == sex)
+    
     if(division == "tested"):
         df =  df.filter(pl.col("drug_tested") == "Yes")
 
