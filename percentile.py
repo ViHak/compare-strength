@@ -32,18 +32,19 @@ def change_data(weight_class, weight_classes, hf):
 def correct_field(hf, lift):
     match lift:
         case "bench":
-            return hf.select(pl.col('bench_max')).filter(pl.col('bench_max')>0).drop_nulls(subset=['bench_max'])
+            return hf.filter(pl.col('bench_max')>0).select(pl.col('bench_max'))
+
         case "squat":
             hf = hf.filter(pl.col("equipment")=="Raw")
-            return hf.select(pl.col('squat_max')).filter(pl.col("squat_max")>0).drop_nulls(subset=['squat_max'])
+            return hf.filter(pl.col("squat_max")>0).select(pl.col('squat_max'))
         case "deadlift":
-            return hf.select(pl.col('deadlift_max')).filter(pl.col('deadlift_max')>0).drop_nulls(subset=['deadlift_max'])
+            return hf.filter(pl.col('deadlift_max')>0).select(pl.col('deadlift_max'))#.drop_nulls(subset=['deadlift_max'])
 
 def percentile_of_score(df, weight_class, lifted_weight, lift, sex, division, calculating_method):
     df = df.filter(pl.col("sex") == sex)
     
     if(division == "tested"):
-        df =  df.filter(pl.col("drug_tested") == "Yes")
+        df = df.filter(pl.col("drug_tested") == "Yes")
 
     weight_classes = WEIGHT_CLASSES[sex]
 
@@ -52,8 +53,8 @@ def percentile_of_score(df, weight_class, lifted_weight, lift, sex, division, ca
     if(calculating_method == "weight-at-percentile"):
         # Calculates the amount of weight that needs to be lifted in order to be in the top x percentile
         # of the user's chosen weight class, where x is the user's given percentile
-            result = scoreatpercentile(lift_df.to_pandas().squeeze(), int(lifted_weight))
+            result = scoreatpercentile(lift_df.to_series().to_numpy(), int(lifted_weight))
             return f"You'd have to {lift} more than {round(result)} kg to be stronger than {lifted_weight}% of people in the {weight_class} kg weight class"
     else:
-        result = percentileofscore(lift_df.to_pandas().squeeze(), int(lifted_weight), kind = "weak")
+        result = percentileofscore(lift_df.to_series().to_numpy(), int(lifted_weight), kind = "weak")
         return f"You can {lift} more than {round(result)}% of people in the {weight_class} kg weight class"
