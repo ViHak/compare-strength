@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+
 {% block head %}
      <meta name="description" content = "Compare your strength">
      <meta name="keywords" content = "Compare strength, relative strength, how strong am I, comparestrength">
@@ -7,26 +8,29 @@
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 {% endblock%}
 
+
 {% block body %}
 
-<div class = "navbar">
-  <h2 class = "header-title">CompareStrength</h2>
+
+<header class = "navbar">
+  <h1>CompareStrength</h1>
   <p>Compare your strength against 30,000 powerlifting competitors</p>
-</div>
+</header>
 
-<div class = "wrapper">
-  <div class = "wrapper-title">
-    <h2>Select your weight class and input your best lifts</h2>
-</div>
-
+<section class = "main-section">
+  <div class ="container">
+    <div class = "wrapper-title">
+      <h2>Select your weight class and input your best lifts</h2>
+    </div>
+    <form>
+      <fieldset class = "selection-wrapper">
+        <label for="sex">Sex:</label>
         <select name = "sex" id = "sex" class = "sex">
           <option value = "M">Male</option>
           <option value = "F">Female</option>
         </select>
-
-        <label for = "weight_classes"></label>
+        <label for="weight_classes">Weight Class (kg):</label>
         <select name = "weight_classes" id = "weight_classes" class = "class-selector">
-          <option value="" disabled selected hidden>Weight Class (kg)</option>
           <option value="59">59 kg</option>
           <option value="66">66 kg</option>
           <option value="74">74 kg</option>
@@ -36,48 +40,56 @@
           <option value="120">120 kg</option>
           <option value="121">120 kg+</option>
         </select>
+      </fieldset>
+    </form>
 
-        <select name = "division" id = "division" class = "division">
-          <option value = "tested">Drug-tested results</option>
-          <option value = "non_tested">All results</option>
-        </select>
-
-        <select name = "percentile" id = "percentile" class = "percentile">
-          <option value = "percentile-of-lift">Percentile of lift</option>
-          <option value = "weight-at-percentile">Lift at percentile</option>
-        </select>
-        <div class="toggle-switch">
-          <label for="toggle" class="toggle-label">Advanced options</label>
-          <input id="toggle" type="checkbox" />
-          <label for="toggle" class="switch"></label>
+    <div>
+    <form>
+        <fieldset class = "selection-wrapper">
+          <select name = "division" id = "division" class = "division">
+            <option value = "tested">Drug-tested results</option>
+            <option value = "non_tested">All results</option>
+          </select>
+          <select name = "percentile" id = "percentile" class = "percentile">
+            <option value = "percentile-of-lift">Percentile of lift</option>
+            <option value = "weight-at-percentile">Lift at percentile</option>
+          </select>
+        </fieldset>
+      </form>
+    <div class="advanced-options-toggle">
+      <label for="toggle" class="toggle-label">Advanced options</label>
+      <input id="toggle" type="checkbox" />
+      <label for="toggle" class="switch"></label>
+    </div>
+    </div>
+      <div class = "input-wrapper">
+        <div class = "input-box">
+          <input type= "text" id = "1" name = "squat" class = "input" placeholder = "Squat one-rep-max (kg)">
+          <div class = "result-box"></div>
         </div>
-        <div class = "grid-box">
-          <div class = "input-box">
-            <input type= "text" id = "1" name = "squat" class = "input" placeholder = "Squat one-rep-max (kg)">
-            <div class = "result-box" id = "aha"></div>
-          </div>
-
-          <div class = "input-box">
-            <input type = "text" id = "2" name = "bench" class = "input" placeholder = "Bench press one-rep-max (kg)">
-            <div class = "result-box"></div>
-          </div>
-         
-          <div class = "input-box">
-            <input type = "text" id = "3" name = "deadlift" class = "input" placeholder = "Deadlift one-rep-max (kg)">
-            <div class = "result-box"></div>
-          </div>
+        <div class = "input-box">
+          <input type = "text" id = "2" name = "bench" class = "input" placeholder = "Bench press one-rep-max (kg)">
+          <div class = "result-box"></div>
         </div>
-
-        <div class = "button-div">
-          <button type = "button" class = "reset-button" id = "reset-button">
-            Reset
-          </button>
+        <div class = "input-box">
+          <input type = "text" id = "3" name = "deadlift" class = "input" placeholder = "Deadlift one-rep-max (kg)">
+          <div class = "result-box"></div>
         </div>
-</div>
-<div class = "footer">
-  <div>The data is from the <a href = "https://www.kaggle.com/open-powerlifting/powerlifting-database">open powerlifting </a>database</div>
-  <div style="text-align-last: end";><a href="https://github.com/ViHak/compare-strength">GitHub</a></div>
-</div>
+      </div>
+
+      <div class = "button-wrapper">
+        <button type = "button" class = "reset-button">
+          Reset
+        </button>
+      </div>
+  </div>
+</section>
+
+
+<footer class = "footer">
+  <p>The data is from the <a href = "https://www.kaggle.com/open-powerlifting/powerlifting-database">open powerlifting </a>database</p>
+  <p style="text-align-last: end;"><a href="https://github.com/ViHak/compare-strength">GitHub</a></p>
+</footer>
 
 <script>
   document.getElementById("sex").addEventListener("change", function() {
@@ -87,8 +99,9 @@
      
       var $cw = $("#weight_classes");
       $cw.empty();
-      $('.grid-box input').val('');
-      $('.grid-box .result-box p').text('');
+      $('.input-wrapper input').val('');
+      $('.input-wrapper .result-box p').text('');
+
 
       $.each(new_options, function(key, value){
         $cw.append($("<option></option>").attr("value", value).text(key));
@@ -99,10 +112,11 @@
       var weight_classes = [47, 52, 57, 63, 69, 76, 84, 85]
       var new_options = {"Weight Class (kg)":"", "47 kg":47, "52 kg":52, "57 kg":57, "63 kg":63, "69 kg":69, "76 kg":76, "84 kg":84, "84 kg+":85}
 
+
       var $cw = $("#weight_classes");
       $cw.empty();
-      $('.grid-box input').val('');
-      $('.grid-box .result-box p').text('');
+      $('.input-wrapper input').val('');
+      $('.input-wrapper .result-box p').text('');
 
       $.each(new_options, function(key,value){
         $cw.append($("<option></option>").attr("value", value).text(key));
@@ -130,26 +144,27 @@
 <script>
   document.getElementById("percentile").addEventListener("change", function() {
     if($(this).val()==="weight-at-percentile"){
-      $('.grid-box input').eq(0).attr('placeholder', 'Input the percentile [1-100] for the squat');
-      $('.grid-box input').eq(1).attr('placeholder', 'Input the percentile [1-100] for the bench press');
-      $('.grid-box input').eq(2).attr('placeholder', 'Input the percentile [1-100] for the deadlift');
+      $('.input-wrapper input').eq(0).attr('placeholder', 'Input the percentile [1-100] for the squat');
+      $('.input-wrapper input').eq(1).attr('placeholder', 'Input the percentile [1-100] for the bench press');
+      $('.input-wrapper input').eq(2).attr('placeholder', 'Input the percentile [1-100] for the deadlift');
     }
     else{
-      $('.grid-box input').eq(0).attr('placeholder', 'Squat one-rep-max (kg)');
-      $('.grid-box input').eq(1).attr('placeholder', 'Bench press one-rep-max (kg)');
-      $('.grid-box input').eq(2).attr('placeholder', 'Deadlift one-rep-max (kg)');
+      $('.input-wrapper input').eq(0).attr('placeholder', 'Squat one-rep-max (kg)');
+      $('.input-wrapper input').eq(1).attr('placeholder', 'Bench press one-rep-max (kg)');
+      $('.input-wrapper input').eq(2).attr('placeholder', 'Deadlift one-rep-max (kg)');
     }
-    $('.grid-box input').val('');
-    $('.grid-box .result-box p').text('');
+    $('.input-wrapper input').val('');
+    $('.input-wrapper .result-box p').text('');
   });
   </script>
 
+
 <script>
     $(document).ready(function(){
-      $('.wrapper').on('change', '.grid-box .input-box .input', function(){
-        /*Checks that the user has chosen a weight class or that their input is of correct type*/ 
+      $('.container').on('change', '.input-wrapper .input-box .input', function(){
+        /*Checks that the user has chosen a weight class or that their input is of correct type*/
         if($("#weight_classes option:selected").is(":disabled")||(!$.isNumeric($(this).val()))){
-          $(".wrapper .grid-box .input-box:nth-of-type("+$(this).attr('id')+") .result-box").html('<p>'+""+'</p>');
+          $(".container .input-wrapper .input-box:nth-of-type("+$(this).attr('id')+") .result-box").html('<p>'+""+'</p>');
           return;
         }
          
@@ -163,20 +178,20 @@
          var sex = $("#sex").val();
          var division = $("#division").val();
          var calculating_method = $("#percentile").val();
-        
+       
          $.ajax({
           url: "/get_percentile",
           type: "get",
           data: {weight_class: weight_class, weight_class_kg:weight_class_kg, lifted_weight:lifted_weight, id:id, lift:lift, sex:sex, division:division, calculating_method:calculating_method},
           success: function(response) {
-            $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+response.result.toString()+'</p>');
+            $(".container .input-wrapper .input-box:nth-of-type("+id+") .result-box").html('<p>'+response.result.toString()+'</p>');
           },
          });
       });
     });
-    
+   
     $(document).ready(function(){
-      $('.wrapper').on('change', '#weight_classes', function(){
+      $('.container').on('change', '#weight_classes', function(){
          var weight_class = $("#weight_classes option:selected").val();
          var weight_class_kg = $("#weight_classes option:selected").text();
          var sex = $("#sex").val();
@@ -197,7 +212,7 @@
     });
 
     $(document).ready(function(){
-      $('.wrapper').on('change', '#division', function(){
+      $('.container').on('change', '#division', function(){
          var weight_class = $("#weight_classes option:selected").val();
          var weight_class_kg = $("#weight_classes option:selected").text();
          var sex = $("#sex").val();
@@ -216,6 +231,7 @@
         }
       });
     });
+
 
     function changeAll(weight_class, weight_class_kg, id, lift, lifted_weight, sex, division, calculating_method){
       var weight_class = weight_class;
@@ -232,21 +248,21 @@
               type: "get",
               data: {weight_class, weight_class_kg: weight_class_kg, lifted_weight:lifted_weight, id:id, lift:lift, sex:sex, division:division, calculating_method:calculating_method},
               success:function(response){
-                $(".wrapper .grid-box .input-box:nth-of-type("+id+") .result-box").html('<p>'+response.result.toString()+'</p>');
+                $(".container .input-wrapper .input-box:nth-of-type("+id+") .result-box").html('<p>'+response.result.toString()+'</p>');
               }
             });
     }
 </script>
 
 <script>
-  document.getElementById("reset-button").addEventListener("click", function() {
-      
+  document.querySelector(".reset-button").addEventListener("click", function() {
      var val1 = $("#weight_classes option:selected").html();
      const $select = document.querySelector('#weight_classes');
      $select.querySelectorAll('option')[0].selected = val1;
 
-     $('.grid-box input').val('');
-     $('.grid-box .result-box p').text('');
+
+     $('.input-wrapper input').val('');
+     $('.input-wrapper .result-box p').text('');
  });
 </script>
 {% endblock%}
