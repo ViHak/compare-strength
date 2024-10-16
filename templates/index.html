@@ -91,38 +91,29 @@
 </footer>
 
 <script>
+  function setWeightClass(isMale){
+    let new_options = isMale
+        ? {"Weight Class (kg)": "", "59 kg": 59, "66 kg": 66, "74 kg": 74, "83 kg": 83, "93 kg": 93, "105 kg": 105, "120 kg": 120, "120 kg+": 121}
+        : {"Weight Class (kg)": "", "47 kg": 47, "52 kg": 52, "57 kg": 57, "63 kg": 63, "69 kg": 69, "76 kg": 76, "84 kg": 84, "84 kg+": 85};
+
+    let $cw = $("#weight-classes");
+    $cw.empty();
+    $('.input-wrapper input').val('');
+    $('.input-wrapper .result-box p').text('');
+
+    $.each(new_options, function (key, value) {
+        $cw.append($("<option></option>").attr("value", value).text(key));
+    });
+
+    $("#weight-classes option:first").attr({"disabled": true, "selected": true, "hidden": true});
+  }
   document.getElementById("sex").addEventListener("change", function() {
-    if($(this).val()==="M"){
-      /*There's bunch of repetition, make a function for the code below*/
-      var new_options = {"Weight Class (kg)":"", "59 kg": 59, "66 kg":66, "74 kg":74, "83 kg":83, "93 kg":93, "105 kg":105, "120 kg":120, "120 kg+":121};
-     
-      var $cw = $("#weight-classes");
-      $cw.empty();
-      $('.input-wrapper input').val('');
-      $('.input-wrapper .result-box p').text('');
-
-
-      $.each(new_options, function(key, value){
-        $cw.append($("<option></option>").attr("value", value).text(key));
-      });
-      $("#weight-classes option:first").attr({"disabled": "true", "selected": "true", "hidden": true});
-    }
-    else{
-      var weight_classes = [47, 52, 57, 63, 69, 76, 84, 85]
-      var new_options = {"Weight Class (kg)":"", "47 kg":47, "52 kg":52, "57 kg":57, "63 kg":63, "69 kg":69, "76 kg":76, "84 kg":84, "84 kg+":85}
-
-
-      var $cw = $("#weight-classes");
-      $cw.empty();
-      $('.input-wrapper input').val('');
-      $('.input-wrapper .result-box p').text('');
-
-      $.each(new_options, function(key,value){
-        $cw.append($("<option></option>").attr("value", value).text(key));
-      });
-      $("#weight-classes option:first").attr({"disabled": "true", "selected": "true", "hidden": true});
-    }
+    let isMale = $(this).val()=="M";
+    setWeightClass(isMale);
   });
+</script>
+
+<script>
   document.getElementById("toggle").addEventListener("change", function() {
     if(this.checked){
       document.getElementById ("division").style.visibility ="visible";
@@ -157,8 +148,18 @@
   });
   </script>
 
-
 <script>
+  let weight_class, weight_class_kg, sex, division, calculating_method, lifted_weights = {};
+  var names = ["squat", "bench", "deadlift"];
+
+  function updateVariables(){
+    weight_class = $("#weight-classes option:selected").val();
+    /*The user's chosen weight class with the unit of measurement displayed next to it. E.g. 74 kg*/
+    weight_class_kg = $("#weight-classes option:selected").text();
+    sex = $("#sex").val();
+    division = $("#division").val();
+    calculating_method = $("#percentile").val();
+  }
     $(document).ready(function(){
       $('.container').on('change', '.input-wrapper .input-box .input', function(){
         /*Checks that the user has chosen a weight class or that their input is of correct type*/
@@ -166,18 +167,12 @@
           $(".container .input-wrapper .input-box:nth-of-type("+$(this).attr('id')+") .result-box").html('<p>'+""+'</p>');
           return;
         }
+        updateVariables()
+        let id = $(this).attr('id');
+        let lift = $(this).attr('name');
+        /*User's input (one-rep-maximum or a percentile)*/
+        let lifted_weight = $(this).val();
          
-         var weight_class = $("#weight-classes option:selected").val();
-         /*The user's chosen weight class with the unit of measurement displayed next to it. E.g. 74 kg*/
-         var weight_class_kg = $("#weight-classes option:selected").text();
-         var id = $(this).attr('id');
-         var lift = $(this).attr('name');
-         /*User's input (one-rep-maximum or a percentile)*/
-         var lifted_weight = $(this).val();
-         var sex = $("#sex").val();
-         var division = $("#division").val();
-         var calculating_method = $("#percentile").val();
-       
          $.ajax({
           url: "/get_percentile",
           type: "get",
@@ -191,16 +186,11 @@
    
     $(document).ready(function(){
       $('.container').on('change', '#weight-classes', function(){
-         var weight_class = $("#weight-classes option:selected").val();
-         var weight_class_kg = $("#weight-classes option:selected").text();
-         var sex = $("#sex").val();
-         var names = ["squat", "bench", "deadlift"];
-         var division = $("#division").val();
-         var calculating_method = $("#percentile").val();
+         updateVariables()
          
-         for (var i = 1; i <=3; i++){
-            var id = i;
-            var lift = names[i-1];
+         for (var i = 0; i < 3; i++){
+            var id = i+1;
+            var lift = names[i];
             var lifted_weight = $("input[name*=" + lift +"]").val();
 
             if(lifted_weight.length!==0){
@@ -212,16 +202,11 @@
 
     $(document).ready(function(){
       $('.container').on('change', '#division', function(){
-         var weight_class = $("#weight-classes option:selected").val();
-         var weight_class_kg = $("#weight-classes option:selected").text();
-         var sex = $("#sex").val();
-         var names = ["squat", "bench", "deadlift"];
-         var division = $("#division").val();
-         var calculating_method = $("#percentile").val();
+         updateVariables()
 
-         for (var i = 1; i <=3; i++){
-            var id = i;
-            var lift = names[i-1];
+         for (var i = 1; i < 3; i++){
+            var id = i+1;
+            var lift = names[i];
             var lifted_weight = $("input[name*=" + lift +"]").val();
 
             if(lifted_weight.length!==0){
@@ -258,7 +243,6 @@
      var val1 = $("#weight-classes option:selected").html();
      const $select = document.querySelector('#weight-classes');
      $select.querySelectorAll('option')[0].selected = val1;
-
 
      $('.input-wrapper input').val('');
      $('.input-wrapper .result-box p').text('');
