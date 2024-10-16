@@ -26,6 +26,8 @@ p{
 
 h1, h2, h3{
     margin:0;
+    font-family:monospace;
+    font-weight: 700;
 }
 
 h1{
@@ -35,8 +37,18 @@ h2{
     font-size:clamp(1.8rem, 0.191vw + 1.739rem, 2rem);
 }
 
+.navbar{
+    display:flex;
+    row-gap:1rem;
+    flex-direction:column;
+    background-color:#3f5a36;
+    padding:1.5rem;
+    box-shadow: 0 1px 6px 0 rgba(0,0,0,.4);
+    color:white;
+}
+
 .main-section{
-    padding: 1rem;
+    padding: 3rem 1.5rem;
 }
 
 .container{
@@ -94,17 +106,6 @@ select{
 .input-wrapper{
     display: grid;
     gap:1rem;
-}
-
-.navbar{
-    display:flex;
-    row-gap:1rem;
-    flex-direction:column;
-    background-color:#3f5a36;
-    padding:1rem;
-    font-size:2rem;
-    box-shadow: 0 1px 6px 0 rgba(0,0,0,.4);
-    color:white;
 }
 
 .footer{

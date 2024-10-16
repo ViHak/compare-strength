@@ -18,7 +18,7 @@
 
 <section class = "main-section">
   <div class ="container">
-    <div class = "title-wrapper">
+    <div>
       <h2>Select your weight class and input your best lifts</h2>
     </div>
     <form>
@@ -28,8 +28,8 @@
           <option value = "M">Male</option>
           <option value = "F">Female</option>
         </select>
-        <label for="weight_classes">Weight Class (kg):</label>
-        <select name = "weight_classes" id = "weight_classes" class = "class-selector">
+        <label for="weight-classes">Weight Class (kg):</label>
+        <select name = "weight-classes" id = "weight-classes" class = "class-selector">
           <option value="59">59 kg</option>
           <option value="66">66 kg</option>
           <option value="74">74 kg</option>
@@ -96,7 +96,7 @@
       /*There's bunch of repetition, make a function for the code below*/
       var new_options = {"Weight Class (kg)":"", "59 kg": 59, "66 kg":66, "74 kg":74, "83 kg":83, "93 kg":93, "105 kg":105, "120 kg":120, "120 kg+":121};
      
-      var $cw = $("#weight_classes");
+      var $cw = $("#weight-classes");
       $cw.empty();
       $('.input-wrapper input').val('');
       $('.input-wrapper .result-box p').text('');
@@ -105,14 +105,14 @@
       $.each(new_options, function(key, value){
         $cw.append($("<option></option>").attr("value", value).text(key));
       });
-      $("#weight_classes option:first").attr({"disabled": "true", "selected": "true", "hidden": true});
+      $("#weight-classes option:first").attr({"disabled": "true", "selected": "true", "hidden": true});
     }
     else{
       var weight_classes = [47, 52, 57, 63, 69, 76, 84, 85]
       var new_options = {"Weight Class (kg)":"", "47 kg":47, "52 kg":52, "57 kg":57, "63 kg":63, "69 kg":69, "76 kg":76, "84 kg":84, "84 kg+":85}
 
 
-      var $cw = $("#weight_classes");
+      var $cw = $("#weight-classes");
       $cw.empty();
       $('.input-wrapper input').val('');
       $('.input-wrapper .result-box p').text('');
@@ -120,7 +120,7 @@
       $.each(new_options, function(key,value){
         $cw.append($("<option></option>").attr("value", value).text(key));
       });
-      $("#weight_classes option:first").attr({"disabled": "true", "selected": "true", "hidden": true});
+      $("#weight-classes option:first").attr({"disabled": "true", "selected": "true", "hidden": true});
     }
   });
   document.getElementById("toggle").addEventListener("change", function() {
@@ -162,14 +162,14 @@
     $(document).ready(function(){
       $('.container').on('change', '.input-wrapper .input-box .input', function(){
         /*Checks that the user has chosen a weight class or that their input is of correct type*/
-        if($("#weight_classes option:selected").is(":disabled")||(!$.isNumeric($(this).val()))){
+        if($("#weight-classes option:selected").is(":disabled")||(!$.isNumeric($(this).val()))){
           $(".container .input-wrapper .input-box:nth-of-type("+$(this).attr('id')+") .result-box").html('<p>'+""+'</p>');
           return;
         }
          
-         var weight_class = $("#weight_classes option:selected").val();
+         var weight_class = $("#weight-classes option:selected").val();
          /*The user's chosen weight class with the unit of measurement displayed next to it. E.g. 74 kg*/
-         var weight_class_kg = $("#weight_classes option:selected").text();
+         var weight_class_kg = $("#weight-classes option:selected").text();
          var id = $(this).attr('id');
          var lift = $(this).attr('name');
          /*User's input (one-rep-maximum or a percentile)*/
@@ -190,9 +190,9 @@
     });
    
     $(document).ready(function(){
-      $('.container').on('change', '#weight_classes', function(){
-         var weight_class = $("#weight_classes option:selected").val();
-         var weight_class_kg = $("#weight_classes option:selected").text();
+      $('.container').on('change', '#weight-classes', function(){
+         var weight_class = $("#weight-classes option:selected").val();
+         var weight_class_kg = $("#weight-classes option:selected").text();
          var sex = $("#sex").val();
          var names = ["squat", "bench", "deadlift"];
          var division = $("#division").val();
@@ -212,8 +212,8 @@
 
     $(document).ready(function(){
       $('.container').on('change', '#division', function(){
-         var weight_class = $("#weight_classes option:selected").val();
-         var weight_class_kg = $("#weight_classes option:selected").text();
+         var weight_class = $("#weight-classes option:selected").val();
+         var weight_class_kg = $("#weight-classes option:selected").text();
          var sex = $("#sex").val();
          var names = ["squat", "bench", "deadlift"];
          var division = $("#division").val();
@@ -255,8 +255,8 @@
 
 <script>
   document.querySelector(".reset-button").addEventListener("click", function() {
-     var val1 = $("#weight_classes option:selected").html();
-     const $select = document.querySelector('#weight_classes');
+     var val1 = $("#weight-classes option:selected").html();
+     const $select = document.querySelector('#weight-classes');
      $select.querySelectorAll('option')[0].selected = val1;
 
 
